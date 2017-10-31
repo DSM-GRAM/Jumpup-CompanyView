@@ -1,6 +1,6 @@
 from selenium import webdriver
 
-_BASE = 'https://www.wanted.co.kr/company/{0}'
+_BASE = 'https://www.rocketpunch.com/jobs?job=sw-developer&page={0}'
 _PARSE_COUNT = 1
 
 
