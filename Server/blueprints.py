@@ -21,6 +21,9 @@ def _modules(package):
     return modules
 
 
+_global_resources = []
+
+
 def _factory(package, endpoint, url_prefix='', api_spec_url='/api/swagger', api_ver=cf.API_VER, api_title=cf.API_TITLE, api_desc=cf.API_DESC):
     """
     :param package: Package for Auto Route
@@ -29,7 +32,7 @@ def _factory(package, endpoint, url_prefix='', api_spec_url='/api/swagger', api_
     :param endpoint: Endpoint of Blueprint
     :type endpoint: str
 
-    :param url_prefix: URL Prefix of Blueprint
+    :param url_prefix: URL Prefix of Blueprint. default = ''
     :type url_prefix: str
 
     :param api_spec_url: Swagger API Spec URL. default ='/api/swagger'
@@ -53,9 +56,13 @@ def _factory(package, endpoint, url_prefix='', api_spec_url='/api/swagger', api_
 
     for loader, name in _modules(package):
         module_ = loader.find_module(name).load_module(name)
-
-        for resource in module_.Resource.__subclasses__():
-            resource.add(resource)
+        try:
+            for resource in module_.Resource.__subclasses__():
+                if resource not in _global_resources:
+                    resources.add(resource)
+                    _global_resources.append(resource)
+        except AttributeError:
+            pass
 
     for resource in resources:
         api.add_resource(resource, resource.uri)
