@@ -1,8 +1,7 @@
 from logging import INFO, Formatter
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, current_app
-from flask_restful_swagger_2 import request
+from flask import Flask, current_app, request
 
 
 def decorate(app):
@@ -34,6 +33,9 @@ def decorate(app):
     @app.after_request
     def after_request(response):
         current_app.logger.info('Respond : {0}'.format(response.status))
+
+        response.headers['X-Powered-By'] = 'PlanB'
+        response.headers['Content-Type'] = 'application/json; charset=utf8'
 
         return response
 
