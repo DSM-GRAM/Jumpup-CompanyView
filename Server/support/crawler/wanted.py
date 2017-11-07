@@ -13,6 +13,13 @@ def parse():
         browser.get(_BASE.format(i))
         soup = Soup(browser.page_source, 'html.parser')
 
+        name = soup.find('div', {'class': 'company-header'}).get_text()
+
+        image_urls = soup.find_all('div', {'class': 'image'})
+        image_url = image_urls[0]['style'][22:-3] if image_urls else None
+
+        logo_url = soup.find('img', {'class': 'logo'})['src']
+
 
 if __name__ == '__main__':
     parse()
