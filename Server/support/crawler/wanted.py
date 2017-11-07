@@ -22,5 +22,11 @@ def parse():
 
         info = str(soup.find('span', {'data-reactid': '.0.1.1.0.2.0.2.0.$0'}))[41:-7].replace('<br/>', '\n')
 
+        establish = soup.find('div', {'data-reactid': '.0.1.1.0.2.0.1.0.1.1'}).get_text()
+        member_count = soup.find('div', {'data-reactid': '.0.1.1.0.2.0.1.0.2.1'}).get_text()
+        label = soup.find('div', {'data-reactid': '.0.1.1.0.2.0.1.0.3.1'}).get_text()
+        address = soup.find('div', {'data-reactid': '.0.1.1.0.2.0.1.1.0.1'}).get_text()
+
+
 if __name__ == '__main__':
     parse()
