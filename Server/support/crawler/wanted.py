@@ -27,6 +27,8 @@ def parse():
         label = soup.find('div', {'data-reactid': '.0.1.1.0.2.0.1.0.3.1'}).get_text()
         address = soup.find('div', {'data-reactid': '.0.1.1.0.2.0.1.1.0.1'}).get_text()
 
+        positions = [position.h1.get_text() for position in soup.find_all('div', {'class': ['col-xs-10']})]
+
 
 if __name__ == '__main__':
     parse()
