@@ -20,6 +20,7 @@ def parse():
 
         logo_url = soup.find('img', {'class': 'logo'})['src']
 
+        info = str(soup.find('span', {'data-reactid': '.0.1.1.0.2.0.2.0.$0'}))[41:-7].replace('<br/>', '\n')
 
 if __name__ == '__main__':
     parse()
