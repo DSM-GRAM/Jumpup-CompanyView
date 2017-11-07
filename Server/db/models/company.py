@@ -2,20 +2,21 @@ from db.mongo import *
 
 
 class CompanyModel(Document):
-    company_name = StringField(required=True)
-    address = StringField(required=True)
-    company_intro = StringField()
-    background_image = FileField()
-    logo = FileField()
+    name = StringField(required=True)
+    image_url = StringField()
+    logo_url = StringField()
+
+    info = StringField()
 
     establish = StringField()
     member_count = StringField()
+    address = StringField(required=True)
 
     meta = {'allow_inheritance': True}
 
 
 class WantedModel(CompanyModel):
-    company_position = StringField()
+    label = StringField()
     positions = ListField(StringField())
 
 
