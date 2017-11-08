@@ -10,7 +10,7 @@ class CompanyModel(Document):
 
     establish = StringField()
     member_count = StringField()
-    address = StringField(required=True)
+    address = StringField()
 
     meta = {'allow_inheritance': True}
 
@@ -27,6 +27,6 @@ class PositionEmbeddedModel(EmbeddedDocument):
 
 
 class RocketPunchModel(CompanyModel):
-    email = StringField()
+    # email = StringField()
     tags = ListField(StringField())
     positions = ListField(EmbeddedDocumentField(PositionEmbeddedModel))

@@ -22,6 +22,7 @@ def parse():
             browser.get(_COMPANY_BASE.format(company_item.div.a['href']))
             soup = Soup(browser.page_source, 'html.parser')
 
+            # --- Parse Basic Information
             name = soup.select('a.section')[2].get_text()
             image_url = soup.select_one('div.cover')['style'][22:-3]
             logo_url = soup.select_one('img.ui.image')['src']
@@ -33,6 +34,7 @@ def parse():
             establish = None
             member_count = None
             address = None
+            # email = None
 
             for company_info in company_infos:
                 if '설립일' in company_info.get_text():
@@ -41,6 +43,11 @@ def parse():
                     member_count = re.search('\d+-\d+명', company_info.get_text()).group()
                 elif '사무실' in company_info.get_text():
                     address = company_info.get_text().split('          ')[-1].strip()
+                # elif '이메일' in company_info.get_text():
+                #     email = re.search('\w+@.+', company_info.get_text()).group()
+
+            # --- Parse Tags
+            tags = [tag.get_text() for tag in soup.select_one('div.ui.bottom.attached.company.tag.segment').select('a')]
 
             # --- Parse Positions
             position_items = soup.select('div.small-job-card.item')
@@ -64,8 +71,11 @@ def parse():
                 establish=establish,
                 member_count=member_count,
                 address=address,
+                # email=email,
+                tags=tags,
                 positions=positions).save()
 
+            print('[RocketPunch] Parse Success : {0}'.format(name))
 
 if __name__ == '__main__':
     parse()
