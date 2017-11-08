@@ -17,10 +17,10 @@ def parse():
         browser.get(_BASE.format(page))
         soup = Soup(browser.page_source, 'html.parser')
 
-        for company_item in soup.select('div.company.item'):
+        for company_item in soup.select_one('div#company-list').select('div.company.item'):
+            # From div#company-list, select div.company.item
             browser.get(_COMPANY_BASE.format(company_item.div.a['href']))
             soup = Soup(browser.page_source, 'html.parser')
-            print(soup.find('h2', {'class': 'name'}).get_text())
 
 
 if __name__ == '__main__':
