@@ -29,6 +29,15 @@ def parse():
 
             info = soup.select_one('section#company-intro').div.div.div.get_text()
 
+            company_infos = soup.select_one('section#company-info').div.div.select('div.item')
+
+            for company_info in company_infos:
+                if '설립일' in company_info.get_text():
+                    establish = re.search('\d+-\d+-\d+', company_info.get_text()).group()
+                elif '구성원' in company_info.get_text():
+                    member_count = re.search('\d+-\d+명', company_info.get_text()).group()
+                elif '사무실' in company_info.get_text():
+                    address = company_info.get_text().split('          ')[-1].strip()
 
 
 if __name__ == '__main__':
