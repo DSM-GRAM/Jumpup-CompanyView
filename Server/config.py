@@ -1,7 +1,8 @@
 import os
+import socket
 from datetime import timedelta
 
-PORT = 3001
+HOST, PORT = socket.gethostbyname(socket.gethostname()), 3001
 
 API_VER = '0.1'
 API_TITLE = 'CompanyView API'
@@ -14,6 +15,6 @@ API_DESC = '''
 '''.format(PORT)
 
 SECRET_KEY = os.getenv('SECRET_KEY')
-JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=365)
-JWT_HEADER_TYPE = 'JWT'
+# JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=365)
+# JWT_HEADER_TYPE = 'JWT'
 # http://flask-jwt-extended.readthedocs.io/en/latest/options.html

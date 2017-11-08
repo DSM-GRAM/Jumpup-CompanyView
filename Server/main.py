@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager
+# from flask_jwt_extended import JWTManager
 
 import config as cf
 import logger
@@ -19,8 +19,6 @@ def _factory():
     app.config.from_pyfile('config.py')
 
     CORS(app)
-    JWTManager(app)
-
     logger.decorate(app)
 
     from blueprints import all_blueprints
@@ -33,4 +31,4 @@ _app = _factory()
 
 
 if __name__ == '__main__':
-    _app.run(port=cf.PORT, threaded=True, debug=True)
+    _app.run(host=cf.HOST, port=cf.PORT, threaded=True, debug=True)
