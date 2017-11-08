@@ -9,7 +9,7 @@ _COMPANY_BASE = 'https://www.rocketpunch.com{0}'
 
 
 def parse():
-    RocketPunchModel.drop_collection()
+    RocketPunchModel.objects.delete()
 
     browser = webdriver.Chrome('C:/Users/dmdkz/Desktop/chromedriver')
     browser.implicitly_wait(10)
