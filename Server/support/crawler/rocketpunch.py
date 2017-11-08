@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup as Soup
 from selenium import webdriver
 import re
 
-from db.models.company import RocketPunchModel
+from db.models.company import RocketPunchModel, PositionEmbeddedModel
 
 _BASE = 'https://www.rocketpunch.com/jobs?job=sw-developer&page={0}'
 _COMPANY_BASE = 'https://www.rocketpunch.com{0}'
@@ -19,7 +19,6 @@ def parse():
         soup = Soup(browser.page_source, 'html.parser')
 
         for company_item in soup.select_one('div#company-list').select('div.company.item'):
-            # From div#company-list, select div.company.item
             browser.get(_COMPANY_BASE.format(company_item.div.a['href']))
             soup = Soup(browser.page_source, 'html.parser')
 
@@ -29,7 +28,11 @@ def parse():
 
             info = soup.select_one('section#company-intro').div.div.div.get_text()
 
+            # --- Parse Company Information
             company_infos = soup.select_one('section#company-info').div.div.select('div.item')
+            establish = None
+            member_count = None
+            address = None
 
             for company_info in company_infos:
                 if '설립일' in company_info.get_text():
@@ -38,6 +41,30 @@ def parse():
                     member_count = re.search('\d+-\d+명', company_info.get_text()).group()
                 elif '사무실' in company_info.get_text():
                     address = company_info.get_text().split('          ')[-1].strip()
+
+            # --- Parse Positions
+            position_items = soup.select('div.small-job-card.item')
+            positions = []
+
+            for position_item in position_items:
+                position_name = position_item.select_one('a.ui.primary.link')
+                position_info = position_item.select_one('p.nowrap.job-stat-info')
+                tech_stack = position_item.select_one('p.nowrap.job-specialties')
+
+                positions.append(PositionEmbeddedModel(
+                    position_name=position_name.get_text() if position_name else None,
+                    position_info=position_info.get_text().strip() if position_info else None,
+                    tech_stack=tech_stack.get_text().strip() if tech_stack else None))
+
+            RocketPunchModel(
+                name=name,
+                image_url=image_url,
+                logo_url=logo_url,
+                info=info,
+                establish=establish,
+                member_count=member_count,
+                address=address,
+                positions=positions).save()
 
 
 if __name__ == '__main__':
