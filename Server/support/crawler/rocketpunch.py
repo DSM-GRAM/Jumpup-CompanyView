@@ -25,6 +25,10 @@ def parse():
 
             name = soup.select('a.section')[2].get_text()
             image_url = soup.select_one('div.cover')['style'][22:-3]
+            logo_url = soup.select_one('img.ui.image')['src']
+
+            info = soup.select_one('section#company-intro').div.div.div.get_text()
+
 
 
 if __name__ == '__main__':
