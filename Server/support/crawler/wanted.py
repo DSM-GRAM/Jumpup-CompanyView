@@ -18,10 +18,8 @@ def parse():
         soup = Soup(browser.page_source, 'html.parser')
 
         name = soup.select_one('div.company-header').get_text()
-
         image_urls = soup.select('div.image')
         image_url = image_urls[0]['style'][22:-3] if image_urls else None
-
         logo_url = soup.select_one('img.logo')['src']
 
         info = str(soup.find('span', {'data-reactid': '.0.1.1.0.2.0.2.0.$0'}))[41:-7].replace('<br/>', '\n')

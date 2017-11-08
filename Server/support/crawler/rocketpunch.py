@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as Soup
 from selenium import webdriver
+import re
 
 from db.models.company import RocketPunchModel
 
@@ -21,6 +22,9 @@ def parse():
             # From div#company-list, select div.company.item
             browser.get(_COMPANY_BASE.format(company_item.div.a['href']))
             soup = Soup(browser.page_source, 'html.parser')
+
+            name = soup.select('a.section')[2].get_text()
+            image_url = soup.select_one('div.cover')['style'][22:-3]
 
 
 if __name__ == '__main__':
