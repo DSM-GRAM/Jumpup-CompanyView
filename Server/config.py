@@ -2,7 +2,7 @@ import os
 import socket
 from datetime import timedelta
 
-HOST, PORT = socket.gethostbyname(socket.gethostname()), 3001
+HOST, PORT = socket.gethostbyname(socket.gethostname()), 3002
 
 API_VER = '0.1'
 API_TITLE = 'CompanyView API'
