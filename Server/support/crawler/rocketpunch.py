@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup as Soup
 from selenium import webdriver
 import re
+import time
 
 from db.models.company import RocketPunchModel, PositionEmbeddedModel
 
@@ -16,10 +17,14 @@ def parse():
 
     for page in range(1, 60):
         browser.get(_BASE.format(page))
+        time.sleep(1)
+        # 네트워크 속도 문제로 full load 실패 시 발생될 잠재적 문제 방어
         soup = Soup(browser.page_source, 'html.parser')
 
         for company_item in soup.select_one('div#company-list').select('div.company.item'):
             browser.get(_COMPANY_BASE.format(company_item.div.a['href']))
+            time.sleep(1)
+            # 네트워크 속도 문제로 full load 실패 시 발생될 잠재적 문제 방어
             soup = Soup(browser.page_source, 'html.parser')
 
             # --- Parse Basic Information

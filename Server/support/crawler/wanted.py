@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as Soup
 from selenium import webdriver
+import time
 
 from db.models.company import WantedModel
 
@@ -10,19 +11,20 @@ _PARSE_COUNT = 300
 def parse():
     WantedModel.objects.delete()
 
-    # browser = webdriver.Chrome('C:/Users/dmdkz/Desktop/chromedriver')
-    # browser.implicitly_wait(10)
+    browser = webdriver.Chrome('C:/Users/dmdkz/Desktop/chromedriver')
+    browser.implicitly_wait(10)
     # Ready Selenium
 
     for i in range(1, _PARSE_COUNT + 1):
-        browser = webdriver.Chrome('C:/Users/dmdkz/Desktop/chromedriver')
-        browser.implicitly_wait(10)
-        # Ready Selenium
-
         browser.get(_BASE.format(i))
+        time.sleep(1)
+        # 네트워크 속도 문제로 full load 실패 시 발생될 잠재적 문제 방어
         soup = Soup(browser.page_source, 'html.parser')
 
         name = soup.select_one('div.company-header').h1.get_text()
+        if not name:
+            continue
+
         image_urls = soup.select('div.image')
         image_url = image_urls[0]['style'][22:-3] if len(image_urls) else None
         logo_url = soup.select_one('img.logo')['src']
@@ -47,7 +49,6 @@ def parse():
             address=address,
             positions=positions).save()
 
-        browser.close()
         print('[Wanted] Parse Success : {0}'.format(name))
 
 if __name__ == '__main__':
