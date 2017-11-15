@@ -1,3 +1,3 @@
-from mongoengine import *
+from flask_mongoengine import MongoEngine
 
-connect('companyview')
+db = MongoEngine()

@@ -1,32 +1,32 @@
-from db.mongo import *
+from db.mongo import db
 
 
-class CompanyModel(Document):
-    name = StringField(required=True)
-    image_url = StringField()
-    logo_url = StringField()
+class CompanyModel(db.Document):
+    name = db.StringField(required=True)
+    image_url = db.StringField()
+    logo_url = db.StringField()
 
-    info = StringField()
+    info = db.StringField()
 
-    establish = StringField()
-    member_count = StringField()
-    address = StringField()
+    establish = db.StringField()
+    member_count = db.StringField()
+    address = db.StringField()
 
     meta = {'allow_inheritance': True}
 
 
 class WantedModel(CompanyModel):
-    label = StringField()
-    positions = ListField(StringField())
+    label = db.StringField()
+    positions = db.ListField(db.StringField())
 
 
-class PositionEmbeddedModel(EmbeddedDocument):
-    position_name = StringField()
-    position_info = StringField()
-    tech_stack = StringField()
+class PositionEmbeddedModel(db.EmbeddedDocument):
+    position_name = db.StringField()
+    position_info = db.StringField()
+    tech_stack = db.StringField()
 
 
 class RocketPunchModel(CompanyModel):
     # email = StringField()
-    tags = ListField(StringField())
-    positions = ListField(EmbeddedDocumentField(PositionEmbeddedModel))
+    tags = db.ListField(db.StringField())
+    positions = db.ListField(db.EmbeddedDocumentField(PositionEmbeddedModel))
