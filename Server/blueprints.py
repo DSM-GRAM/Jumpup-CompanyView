@@ -3,8 +3,11 @@ import pkgutil
 from flask import Blueprint
 from flask_restful_swagger_2 import Api
 
-import config as cf
+import config
+
 from routes import api
+
+cf = config.Config()
 
 
 def _modules(packages):
@@ -25,9 +28,9 @@ def _modules(packages):
 _global_resources = set()
 
 
-def _factory(packages, bp_endpoint, url_prefix='', api_spec_url='/api/swagger', api_ver=cf.API_VER, api_title=cf.API_TITLE, api_desc=cf.API_DESC):
+def _factory(packages, bp_endpoint, url_prefix='', api_spec_url='/api/swagger'):
     bp = Blueprint(bp_endpoint, __name__, url_prefix=url_prefix)
-    api = Api(bp, api_spec_url=api_spec_url, api_version=api_ver, title=api_title, description=api_desc)
+    api = Api(bp, api_spec_url=api_spec_url, api_version=cf.API_VER, title=cf.API_TITLE, description=cf.API_DESC)
 
     resources = set()
 
@@ -46,6 +49,6 @@ def _factory(packages, bp_endpoint, url_prefix='', api_spec_url='/api/swagger', 
 
     return bp
 
-bp_api = _factory([api], 'API')
+bp = _factory([api], 'API')
 
-all_blueprints = (bp_api,)
+all_blueprints = (bp,)
